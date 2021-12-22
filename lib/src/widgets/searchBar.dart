@@ -48,8 +48,11 @@ class SearchBar extends StatelessWidget {
               color: Theme.of(context).primaryColor,
             ),
             width: 60,
-            child: TextButton(
-              child: Text("Search", style: Theme.of(context).textTheme.bodyText1),
+            child: IconButton(
+              icon: const Icon(
+                Icons.search,
+                color: Colors.white,
+              ),
               onPressed: () {},
             ),
           ),

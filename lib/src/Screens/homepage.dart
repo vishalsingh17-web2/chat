@@ -15,100 +15,73 @@ class HomePage extends StatefulWidget {
 ScrollController controller = ScrollController(keepScrollOffset: true);
 
 class _HomePageState extends State<HomePage>
-    with AutomaticKeepAliveClientMixin {
-  var searchBarHeight = 100.00;
-  scrollController() {
-    if (controller.position.userScrollDirection == ScrollDirection.reverse) {
-      if (searchBarHeight != 0) {
-        setState(() {
-          searchBarHeight = 0;
-        });
-      }
-    }
-    if (controller.position.userScrollDirection == ScrollDirection.forward) {
-      if (searchBarHeight == 0) {
-        setState(() {
-          searchBarHeight = 100.00;
-        });
-      }
-    }
-  }
+    with SingleTickerProviderStateMixin {
+  var _scrollViewController;
+  var _tabController;
 
   @override
   void initState() {
-    controller.addListener(scrollController);
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    controller.removeListener(scrollController);
-    controller.dispose();
-    super.dispose();
+    _scrollViewController = ScrollController();
+    _tabController = TabController(vsync: this, length: 3);
   }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: DefaultTabController(
-        length: 3,
-        initialIndex: 0,
-        child: Scaffold(
-          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-          body: Column(
-            children: [
-              profileHeader(
-                context: context,
-                name: 'Vishal Singh',
-                imageUrl: 'assets/images/profile.png',
-              ),
-              AnimatedContainer(
-                duration: const Duration(milliseconds: 300),
-                height: searchBarHeight,
-                curve: Curves.fastOutSlowIn,
-                child: const SearchBar(),
-              ),
-              // ThemeX.switchTheme(widget.value),
-              Expanded(
-                flex: 2,
-                child: Container(
-                  child: TabBar(
-                    labelColor: Theme.of(context).tabBarTheme.labelColor,
-                    tabs: const [
-                      Tab(
-                        text: 'Direct messages',
-                        icon: Icon(Icons.chat),
-                      ),
-                      Tab(
-                        text: 'Groups',
-                        icon: Icon(Icons.group),
-                      ),
-                      Tab(
-                        text: 'Calls',
-                        icon: Icon(Icons.call),
-                      ),
-                    ],
+      child: Scaffold(
+        body: NestedScrollView(
+          controller: _scrollViewController,
+          headerSliverBuilder: (context, bool) => [
+            SliverAppBar(
+              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+              pinned: true,
+              floating: true,
+              toolbarHeight: 100,
+              expandedHeight: 250,
+              elevation: 0,
+              flexibleSpace: FlexibleSpaceBar(
+                background: Column(
+                children: [
+                  profileHeader(
+                    context: context,
+                    name: 'Vishal Singh',
+                    imageUrl: 'assets/images/profile.png',
                   ),
-                ),
+                  const SearchBar()
+                ],
+              )),
+              bottom: TabBar(
+                controller: _tabController,
+                tabs: const [
+                  Tab(
+                    text: 'Direct messages',
+                    icon: Icon(Icons.chat),
+                  ),
+                  Tab(
+                    text: 'Groups',
+                    icon: Icon(Icons.group),
+                  ),
+                  Tab(
+                    text: 'Calls',
+                    icon: Icon(Icons.call),
+                  ),
+                ],
               ),
-              Expanded(
-                flex: 8,
-                child: TabBarView(
-                  children: [
-                    ChatView(controller: controller),
-                    Container(),
-                    Container(),
-                  ],
-                ),
-              ),
+            ),
+          ],
+          body: TabBarView(
+            controller: _tabController,
+            children: [
+              ChatView(),
+              Container(),
+              Container(),
             ],
           ),
         ),
       ),
     );
   }
-
-  @override
-  // TODO: implement wantKeepAlive
-  bool get wantKeepAlive => true;
 }
+
+ 

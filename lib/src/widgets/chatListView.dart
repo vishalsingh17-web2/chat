@@ -54,8 +54,7 @@ List<Widget> chatList = const [
 ];
 
 class ChatView extends StatefulWidget {
-  final ScrollController controller;
-  const ChatView({Key? key, required this.controller}) : super(key: key);
+  const ChatView({Key? key}) : super(key: key);
 
   @override
   State<ChatView> createState() => _ChatViewState();
@@ -63,14 +62,16 @@ class ChatView extends StatefulWidget {
 
 class _ChatViewState extends State<ChatView> {
   @override
-  
   @override
   Widget build(BuildContext context) {
     return ListView(
-      controller: widget.controller,
-      physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-      children:chatList
-          
-    );
+        physics: const BouncingScrollPhysics(
+            parent: AlwaysScrollableScrollPhysics()),
+        children: [
+          const SizedBox(
+            height: 20,
+          ),
+          ...chatList
+        ]);
   }
 }
