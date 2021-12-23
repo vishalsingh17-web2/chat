@@ -24,9 +24,11 @@ class _SettingsState extends State<Settings> {
             title: const Text("Dark Mode"),
             trailing: Switch(
               value: Constant.isDark,
-              onChanged: (value) {
+              onChanged: (value) async {
                 themeBloc.changeTheme(value);
                 Constant.isDark = value;
+                await SharedData.setTheme(value);
+                await SharedData.init();
               },
             ),
           )

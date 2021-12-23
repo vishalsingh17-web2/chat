@@ -1,4 +1,5 @@
 import 'package:chat/src/widgets/chatListView.dart';
+import 'package:chat/src/widgets/groupListView.dart';
 import 'package:chat/src/widgets/searchBar.dart';
 import 'package:chat/src/widgets/widgets.dart';
 import 'package:chat/theme/theme.dart';
@@ -25,7 +26,12 @@ class _HomePageState extends State<HomePage>
     _scrollViewController = ScrollController();
     _tabController = TabController(vsync: this, length: 3);
   }
-
+  @override
+  void dispose() {
+    _scrollViewController.dispose();
+    _tabController.dispose();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -74,7 +80,7 @@ class _HomePageState extends State<HomePage>
             controller: _tabController,
             children: [
               ChatView(),
-              Container(),
+              GroupView(),
               Container(),
             ],
           ),

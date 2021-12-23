@@ -1,50 +1,51 @@
-import 'package:chat/src/widgets/chatList_Item.dart';
 import 'package:flutter/material.dart';
 
+import 'groupList_item.dart';
+
 List<Widget> chatList = const [
-  ChatListItem(
+  GroupListItem(
     name: 'Vishal Singh',
     imageUrl: 'assets/images/profile.png',
     message: 'Hey, how are you?',
     time: '12:00',
     isSelected: false,
   ),
-  ChatListItem(
+  GroupListItem(
     name: 'Aman',
     imageUrl: 'assets/images/profile.png',
     message: 'Hey, how are you?',
     time: '12:00',
     isSelected: false,
   ),
-  ChatListItem(
+  GroupListItem(
     name: 'Aratrik',
     imageUrl: 'assets/images/profile.png',
     message: 'Hey, how are you?',
     time: '12:00',
     isSelected: false,
   ),
-  ChatListItem(
+  GroupListItem(
     name: 'Tanishq',
     imageUrl: 'assets/images/profile.png',
     message: 'Hey, how are you?',
     time: '12:00',
     isSelected: false,
   ),
-  ChatListItem(
+  GroupListItem(
     name: 'Siddhu',
     imageUrl: 'assets/images/profile.png',
     message: 'Hey, how are you?',
     time: '12:00',
     isSelected: false,
   ),
-  ChatListItem(
+  GroupListItem(
     name: 'Arpit',
     imageUrl: 'assets/images/profile.png',
     message: 'Hey, how are you?',
     time: '12:00',
     isSelected: false,
   ),
-  ChatListItem(
+  GroupListItem(
     name: 'Vishal Singh',
     imageUrl: 'assets/images/profile.png',
     message: 'Hey, how are you?',
@@ -53,15 +54,14 @@ List<Widget> chatList = const [
   ),
 ];
 
-class ChatView extends StatefulWidget {
-  const ChatView({Key? key}) : super(key: key);
+class GroupView extends StatefulWidget {
+  const GroupView({Key? key}) : super(key: key);
 
   @override
-  State<ChatView> createState() => _ChatViewState();
+  State<GroupView> createState() => _GroupViewState();
 }
 
-class _ChatViewState extends State<ChatView> {
-  @override
+class _GroupViewState extends State<GroupView> {
   @override
   Widget build(BuildContext context) {
     return ListView(
