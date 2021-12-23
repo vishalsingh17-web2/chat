@@ -1,3 +1,4 @@
+import 'package:chat/src/Screens/login.dart';
 import 'package:chat/src/Screens/settings.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -44,6 +45,11 @@ Widget profileHeader({
         switch (item) {
           case 'Profile':
             print('Profile clicked');
+            Navigator.of(context).push(
+              CupertinoPageRoute(
+                builder: (context) => Login(),
+              ),
+            );
             break;
           case 'Settings':
           print('Setting clicked');

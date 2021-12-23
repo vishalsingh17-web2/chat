@@ -1,4 +1,5 @@
 import 'package:chat/src/Screens/homepage.dart';
+import 'package:chat/src/Screens/login.dart';
 import 'package:chat/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'components/shared_database.dart';
@@ -29,7 +30,7 @@ class _MyAppState extends State<MyApp> {
           debugShowCheckedModeBanner: false,
           title: 'Chat',
           theme: snapshot.data!?ThemeX.darkTheme():ThemeX.lightTheme(),
-          home: HomePage(),
+          home: SharedData.isLoggedIn!=null?HomePage():const Login(),
         );
       }
     );
