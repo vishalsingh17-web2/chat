@@ -1,3 +1,5 @@
+import 'package:chat/components/shared_database.dart';
+import 'package:chat/firebase/authentication.dart';
 import 'package:chat/src/Screens/login.dart';
 import 'package:chat/src/Screens/settings.dart';
 import 'package:flutter/cupertino.dart';
@@ -6,6 +8,7 @@ import 'package:flutter/material.dart';
 var myMenuItems = <String>[
   'Profile',
   'Settings',
+  'Logout',
 ];
 
 Widget profileHeader({
@@ -34,7 +37,7 @@ Widget profileHeader({
         borderRadius: BorderRadius.all(Radius.circular(50)),
       ),
       child: ClipOval(
-        child: Image.asset(
+        child: Image.network(
           imageUrl,
         ),
       ),
@@ -52,13 +55,22 @@ Widget profileHeader({
             );
             break;
           case 'Settings':
-          print('Setting clicked');
+            print('Setting clicked');
             Navigator.of(context).push(
               CupertinoPageRoute(
                 builder: (context) => Settings(),
               ),
             );
-            
+            break;
+          case 'Logout':
+            FirebaseService.signOutFromGoogle();
+            SharedData.setLoginStatus(false);
+            print('Logout clicked');
+            Navigator.of(context).pushReplacement(
+              CupertinoPageRoute(
+                builder: (context) => Login(),
+              ),
+            );
             break;
         }
       },

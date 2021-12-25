@@ -1,7 +1,8 @@
+import 'package:chat/components/shared_database.dart';
 import 'package:chat/src/widgets/chatListView.dart';
 import 'package:chat/src/widgets/groupListView.dart';
 import 'package:chat/src/widgets/searchBar.dart';
-import 'package:chat/src/widgets/widgets.dart';
+import 'package:chat/src/widgets/profileHeader.dart';
 import 'package:chat/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -12,8 +13,6 @@ class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
 }
-
-
 
 class _HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin {
@@ -26,12 +25,14 @@ class _HomePageState extends State<HomePage>
     _scrollViewController = ScrollController();
     _tabController = TabController(vsync: this, length: 3);
   }
+
   @override
   void dispose() {
     _scrollViewController.dispose();
     _tabController.dispose();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -48,15 +49,16 @@ class _HomePageState extends State<HomePage>
               elevation: 0,
               flexibleSpace: FlexibleSpaceBar(
                 background: Column(
-                children: [
-                  profileHeader(
-                    context: context,
-                    name: 'Vishal Singh',
-                    imageUrl: 'assets/images/profile.png',
-                  ),
-                  const SearchBar()
-                ],
-              )),
+                  children: [
+                    profileHeader(
+                      context: context,
+                      name: SharedData.userObject!.name,
+                      imageUrl: SharedData.userObject!.image,
+                    ),
+                    const SearchBar()
+                  ],
+                ),
+              ),
               bottom: TabBar(
                 controller: _tabController,
                 tabs: const [
@@ -89,5 +91,3 @@ class _HomePageState extends State<HomePage>
     );
   }
 }
-
- 

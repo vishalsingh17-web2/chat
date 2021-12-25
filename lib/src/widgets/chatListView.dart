@@ -1,57 +1,7 @@
 import 'package:chat/src/widgets/chatList_Item.dart';
 import 'package:flutter/material.dart';
 
-List<Widget> chatList = const [
-  ChatListItem(
-    name: 'Vishal Singh',
-    imageUrl: 'assets/images/profile.png',
-    message: 'Hey, how are you?',
-    time: '12:00',
-    isSelected: false,
-  ),
-  ChatListItem(
-    name: 'Aman',
-    imageUrl: 'assets/images/profile.png',
-    message: 'Hey, how are you?',
-    time: '12:00',
-    isSelected: false,
-  ),
-  ChatListItem(
-    name: 'Aratrik',
-    imageUrl: 'assets/images/profile.png',
-    message: 'Hey, how are you?',
-    time: '12:00',
-    isSelected: false,
-  ),
-  ChatListItem(
-    name: 'Tanishq',
-    imageUrl: 'assets/images/profile.png',
-    message: 'Hey, how are you?',
-    time: '12:00',
-    isSelected: false,
-  ),
-  ChatListItem(
-    name: 'Siddhu',
-    imageUrl: 'assets/images/profile.png',
-    message: 'Hey, how are you?',
-    time: '12:00',
-    isSelected: false,
-  ),
-  ChatListItem(
-    name: 'Arpit',
-    imageUrl: 'assets/images/profile.png',
-    message: 'Hey, how are you?',
-    time: '12:00',
-    isSelected: false,
-  ),
-  ChatListItem(
-    name: 'Vishal Singh',
-    imageUrl: 'assets/images/profile.png',
-    message: 'Hey, how are you?',
-    time: '12:00',
-    isSelected: false,
-  ),
-];
+List<Widget> chatList = const [];
 
 class ChatView extends StatefulWidget {
   const ChatView({Key? key}) : super(key: key);

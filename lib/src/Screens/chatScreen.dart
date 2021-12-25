@@ -1,6 +1,11 @@
+import 'dart:io';
+
+import 'package:chat/main.dart';
+import 'package:chat/models/user_info.dart';
 import 'package:chat/src/widgets/chatBox.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 ScrollController controller = ScrollController();
 List<Widget> conversation = [
@@ -44,13 +49,16 @@ List<Widget> conversation = [
 ];
 
 class ChatScreen extends StatefulWidget {
-  const ChatScreen({Key? key}) : super(key: key);
+  final UserInf user;
+  ChatScreen({Key? key, required this.user}) : super(key: key);
 
   @override
   _ChatScreenState createState() => _ChatScreenState();
 }
 
 class _ChatScreenState extends State<ChatScreen> {
+  bool show = false;
+  
   TextEditingController _msgController = TextEditingController();
   @override
   void initState() {
@@ -62,6 +70,8 @@ class _ChatScreenState extends State<ChatScreen> {
     super.initState();
   }
 
+ 
+  
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -81,13 +91,15 @@ class _ChatScreenState extends State<ChatScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Image.asset(
-                      'assets/images/profile.png',
-                      height: 50,
-                      width: 50,
+                    ClipOval(
+                      child: Image.network(
+                        widget.user.image,
+                        height: 40,
+                        width: 40,
+                      ),
                     ),
                     Text(
-                      "Tanishq",
+                      '${widget.user.name}',
                       style: Theme.of(context).textTheme.headline3,
                     ),
                   ],
@@ -137,22 +149,25 @@ class _ChatScreenState extends State<ChatScreen> {
                       ),
                       onPressed: () {
                         if (_msgController.text.length != 0) {
-                          setState(() {
-                            conversation.add(
-                              ChatBox(
-                                sentByMe: true,
-                                message: _msgController.text,
-                                time:
-                                    "${DateFormat.Hm().format(DateTime.now())}",
-                              ),
-                            );
-                            _msgController.clear();
-                            controller.animateTo(
-                              0.0,
-                              duration: const Duration(milliseconds: 500),
-                              curve: Curves.fastOutSlowIn,
-                            );
-                          });
+                          setState(
+                            () {
+                              conversation.add(
+                                ChatBox(
+                                  sentByMe: true,
+                                  message: _msgController.text,
+                                  time:
+                                      "${DateFormat.Hm().format(DateTime.now())}",
+                                ),
+                              );
+                              SocketIO.sendMessage(_msgController.text);
+                              _msgController.clear();
+                              controller.animateTo(
+                                0.0,
+                                duration: const Duration(milliseconds: 500),
+                                curve: Curves.fastOutSlowIn,
+                              );
+                            },
+                          );
                         }
                       },
                     ),
