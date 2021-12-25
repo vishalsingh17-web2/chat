@@ -42,7 +42,6 @@ class FirebaseService {
       'phoneNumber': currentUser.phoneNumber.toString(),
     };
     SharedData.saveUser(userInfo);
-    HelperData.saveData(userInfo);
   }
 
   static void writeData() {
