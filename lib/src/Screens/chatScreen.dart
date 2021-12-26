@@ -27,20 +27,24 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   void initState() {
     SocketIO.init();
-    SocketIO.socket!.onConnect((data){
-      SocketIO.socket!.on('message',(msg){
+    SocketIO.socket!.onConnect((data) {
+      SocketIO.socket!.on('message', (msg) {
         print(msg);
-        setState(() {
-          conversation.add(ChatBox(
-            sentByMe: false,
-            message: msg['message'],
-            time: DateFormat.Hm().format(DateTime.parse(msg['time'])).toString(),
-          ));
-        });
+        if (msg['sourceId'] == widget.user.uid &&
+            msg['targetId'] == Boxes.getCurrentUserInfo()!.uid) {
+          setState(() {
+            conversation.add(ChatBox(
+              sentByMe: false,
+              message: msg['message'],
+              time: DateFormat.Hm()
+                  .format(DateTime.parse(msg['time']))
+                  .toString(),
+            ));
+          });
+        }
       });
     });
-    
-    
+
     controller.animateTo(
       0.0,
       duration: const Duration(milliseconds: 500),
@@ -48,8 +52,6 @@ class _ChatScreenState extends State<ChatScreen> {
     );
     super.initState();
   }
-  
-  
 
   @override
   Widget build(BuildContext context) {
