@@ -3,6 +3,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 
 class Boxes{
   static init()async{
+    Hive.registerAdapter(UserInfAdapter());
     await Hive.openBox<UserInf>('userInfo');
     await Hive.openBox('theme');
   }

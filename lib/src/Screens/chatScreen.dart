@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:chat/hive/boxes.dart';
 import 'package:chat/main.dart';
 import 'package:chat/hive/user_info.dart';
 import 'package:chat/src/widgets/chatBox.dart';
@@ -8,45 +9,7 @@ import 'package:intl/intl.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 ScrollController controller = ScrollController();
-List<Widget> conversation = [
-  const ChatBox(
-    message: 'You look bit down. What’s the matter?',
-    sentByMe: false,
-    time: '07:52',
-  ),
-  const ChatBox(
-    sentByMe: true,
-    message: 'Nothing much.',
-    time: '07:53',
-  ),
-  const ChatBox(
-    sentByMe: false,
-    message: 'Looks like something isn’t right.',
-    time: '07:53',
-  ),
-  const ChatBox(
-      sentByMe: true,
-      time: '07:54',
-      message:
-          'Ya. It’s at the job front. You know that the telecom industry is going through a rough patch because of falling prices and shrinking margins. These factors along with consolidation in the industry is threatening the stability of our jobs. And even if the job remains, career growth isn’t exciting.'),
-  const ChatBox(
-    sentByMe: false,
-    time: '07:55',
-    message:
-        'I know. I’ve been reading about some of these issues about your industry in the newspapers. So have you thought of any plan?',
-  ),
-  const ChatBox(
-    sentByMe: true,
-    time: '07:56',
-    message:
-        'I’ve been thinking about it for a while, but haven’t concretized anything so far.',
-  ),
-  const ChatBox(
-    sentByMe: false,
-    time: '07:57',
-    message: 'What have you been thinking😁, if you can share?',
-  )
-];
+List<Widget> conversation = [];
 
 class ChatScreen extends StatefulWidget {
   final UserInf user;
@@ -58,10 +21,26 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   bool show = false;
-  
+
   TextEditingController _msgController = TextEditingController();
+
   @override
   void initState() {
+    SocketIO.init();
+    SocketIO.socket!.onConnect((data){
+      SocketIO.socket!.on('message',(msg){
+        print(msg);
+        setState(() {
+          conversation.add(ChatBox(
+            sentByMe: false,
+            message: msg['message'],
+            time: DateFormat.Hm().format(DateTime.parse(msg['time'])).toString(),
+          ));
+        });
+      });
+    });
+    
+    
     controller.animateTo(
       0.0,
       duration: const Duration(milliseconds: 500),
@@ -69,9 +48,9 @@ class _ChatScreenState extends State<ChatScreen> {
     );
     super.initState();
   }
-
- 
   
+  
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -159,7 +138,12 @@ class _ChatScreenState extends State<ChatScreen> {
                                       "${DateFormat.Hm().format(DateTime.now())}",
                                 ),
                               );
-                              SocketIO.sendMessage(_msgController.text);
+                              SocketIO.sendMessage(
+                                message: _msgController.text,
+                                sourceId: Boxes.getCurrentUserInfo()!.uid,
+                                targetId: widget.user.uid,
+                                time: DateTime.now().toString(),
+                              );
                               _msgController.clear();
                               controller.animateTo(
                                 0.0,
