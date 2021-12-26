@@ -1,4 +1,5 @@
 import 'package:chat/components/shared_database.dart';
+import 'package:chat/hive/boxes.dart';
 import 'package:chat/main.dart';
 import 'package:chat/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -23,12 +24,14 @@ class _SettingsState extends State<Settings> {
           ListTile(
             title: const Text("Dark Mode"),
             trailing: Switch(
-              value: Constant.isDark,
-              onChanged: (value) async {
+              value: Boxes.getTheme()??true,
+              onChanged: (value) {
                 themeBloc.changeTheme(value);
-                Constant.isDark = value;
-                await SharedData.setTheme(value);
-                await SharedData.init();
+                if(value){
+                  Boxes.setdarkTheme();
+                }else{
+                  Boxes.setlightTheme();
+                }
               },
             ),
           )

@@ -1,21 +1,13 @@
-import 'dart:io';
-
-import 'package:chat/components/hive_database.dart';
-import 'package:chat/firebase/authentication.dart';
-import 'package:chat/models/hive/user_info.dart';
+import 'package:chat/hive/user_info.dart';
 import 'package:chat/src/Screens/homepage.dart';
 import 'package:chat/src/Screens/login.dart';
 import 'package:chat/theme/theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
-
 import 'package:socket_io_client/socket_io_client.dart' as IO;
-import 'components/shared_database.dart';
+import 'hive/boxes.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,22 +22,30 @@ class MyApp extends StatefulWidget {
 }
 
 ThemeBloc themeBloc = ThemeBloc();
+check() {
+  FirebaseAuth _firebase = FirebaseAuth.instance;
+  if (_firebase.currentUser != null) {
+    return HomePage();
+  } else {
+    return Login();
+  }
+}
 
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<bool>(
-        initialData: SharedData.theme ?? SharedData.defaultTheme,
-        stream: themeBloc.themeStream,
-        builder: (context, AsyncSnapshot<bool> snapshot) {
-          Constant.isDark = snapshot.data!;
-          return MaterialApp(
-            debugShowCheckedModeBanner: false,
-            title: 'Chat',
-            theme: snapshot.data! ? ThemeX.darkTheme() : ThemeX.lightTheme(),
-            home: SharedData.isLoggedIn != null ? HomePage() : const Login(),
-          );
-        });
+      initialData: Boxes.getTheme() ?? true,
+      stream: themeBloc.themeStream,
+      builder: (context, AsyncSnapshot<bool> snapshot) {
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'Chat',
+          theme: snapshot.data! ? ThemeX.darkTheme() : ThemeX.lightTheme(),
+          home: check(),
+        );
+      },
+    );
   }
 }
 
@@ -66,22 +66,10 @@ class SocketIO {
 
 class Init {
   static init() async {
-    await SharedData.setDefaultTheme(true);
-    await SharedData.init();
     await Firebase.initializeApp();
     SocketIO.init();
-    await Hive.initFlutter();  
+    await Hive.initFlutter();
     Hive.registerAdapter(UserInfAdapter());
-    await Hive.openBox<UserInf>('userInfo');
-
-    // var media = await Permission.accessMediaLocation.request();
-    // var storage = await Permission.storage.request();
-    // Directory appDocDir = await getApplicationDocumentsDirectory();
-    // String appDocPath = appDocDir.path;
-    // if (storage.isGranted && media.isGranted) {
-    //   Hive.init(appDocPath);
-    // }
-    
-    // HelperData.getData();
+    await Boxes.init();
   }
 }

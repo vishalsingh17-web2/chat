@@ -1,6 +1,7 @@
 import 'package:chat/components/shared_database.dart';
 import 'package:chat/firebase/authentication.dart';
-import 'package:chat/models/hive/user_info.dart';
+import 'package:chat/hive/boxes.dart';
+import 'package:chat/hive/user_info.dart';
 import 'package:chat/src/Screens/chatScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -105,7 +106,7 @@ class _SearchBarState extends State<SearchBar> {
                         itemCount: options.length,
                         itemBuilder: (context, index) {
                           if (options.elementAt(index).email ==
-                              SharedData.userObject!.email) {
+                              Boxes.getCurrentUserInfo()!.email) {
                             return Container();
                           } else {
                             return ListTile(
@@ -140,7 +141,9 @@ class _SearchBarState extends State<SearchBar> {
                 );
               },
               onSelected: (UserInf selection) {
-                Boxes.getUserInfoBox().add(selection);
+                if(Boxes.getUserInfoBox().get(selection.uid)==null){
+                  Boxes.getUserInfoBox().put(selection.uid, selection);
+                }
                 Navigator.of(context).push(
                   CupertinoPageRoute(
                     builder: (context) => ChatScreen(user: selection),

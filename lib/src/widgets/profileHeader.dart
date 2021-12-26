@@ -1,5 +1,7 @@
 import 'package:chat/components/shared_database.dart';
 import 'package:chat/firebase/authentication.dart';
+import 'package:chat/hive/boxes.dart';
+import 'package:chat/hive/user_info.dart';
 import 'package:chat/src/Screens/login.dart';
 import 'package:chat/src/Screens/settings.dart';
 import 'package:flutter/cupertino.dart';
@@ -64,7 +66,10 @@ Widget profileHeader({
             break;
           case 'Logout':
             FirebaseService.signOutFromGoogle();
-            SharedData.setLoginStatus(false);
+            Boxes.getUserInfoBox().deleteAll(Boxes.getUserInfoBox().keys);
+            // Boxes.setCurrentUserBox().delete('currentUser');
+          
+            // SharedData.setLoginStatus(false);
             print('Logout clicked');
             Navigator.of(context).pushReplacement(
               CupertinoPageRoute(

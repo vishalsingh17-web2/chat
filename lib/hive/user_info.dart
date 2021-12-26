@@ -23,8 +23,3 @@ class UserInf extends HiveObject {
   
 }
 
-class Boxes{
-  static const String userInfo = 'userInfo';
-  static Box<UserInf> getUserInfoBox() => Hive.box<UserInf>(userInfo);
-  
-}

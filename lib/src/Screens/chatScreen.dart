@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:chat/main.dart';
-import 'package:chat/models/hive/user_info.dart';
+import 'package:chat/hive/user_info.dart';
 import 'package:chat/src/widgets/chatBox.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';

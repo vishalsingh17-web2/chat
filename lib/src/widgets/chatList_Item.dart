@@ -1,5 +1,5 @@
 import 'package:chat/components/shared_database.dart';
-import 'package:chat/models/hive/user_info.dart';
+import 'package:chat/hive/user_info.dart';
 import 'package:chat/src/Screens/chatScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

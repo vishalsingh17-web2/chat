@@ -85,7 +85,7 @@ class _LoginState extends State<Login> {
                 onPressed: () async {
                   await FirebaseService.signInwithGoogle();
                   await FirebaseService.saveUserInfo();
-                  await SharedData.setLoginStatus(true);
+                  
                   FirebaseService.writeData();
                   print("Login Successful");
                   Navigator.of(context).pushReplacement(

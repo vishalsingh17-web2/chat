@@ -1,4 +1,6 @@
 import 'package:chat/components/shared_database.dart';
+import 'package:chat/hive/boxes.dart';
+import 'package:chat/hive/user_info.dart';
 import 'package:chat/src/widgets/chatListView.dart';
 import 'package:chat/src/widgets/groupListView.dart';
 import 'package:chat/src/widgets/searchBar.dart';
@@ -52,8 +54,8 @@ class _HomePageState extends State<HomePage>
                   children: [
                     profileHeader(
                       context: context,
-                      name: SharedData.userObject!.name,
-                      imageUrl: SharedData.userObject!.image,
+                      name: Boxes.getCurrentUserInfo()!.name,
+                      imageUrl: Boxes.getCurrentUserInfo()!.image,
                     ),
                     const SearchBar()
                   ],
