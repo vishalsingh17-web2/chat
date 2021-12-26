@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:chat/components/hive_database.dart';
 import 'package:chat/firebase/authentication.dart';
+import 'package:chat/models/hive/user_info.dart';
 import 'package:chat/src/Screens/homepage.dart';
 import 'package:chat/src/Screens/login.dart';
 import 'package:chat/theme/theme.dart';
@@ -9,6 +10,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -68,15 +70,17 @@ class Init {
     await SharedData.init();
     await Firebase.initializeApp();
     SocketIO.init();
-    
+    await Hive.initFlutter();  
+    Hive.registerAdapter(UserInfAdapter());
+    await Hive.openBox<UserInf>('userInfo');
 
-    var media = await Permission.accessMediaLocation.request();
-    var storage = await Permission.storage.request();
-    Directory appDocDir = await getApplicationDocumentsDirectory();
-    String appDocPath = appDocDir.path;
-    if (storage.isGranted && media.isGranted) {
-      Hive.init(appDocPath);
-    }
+    // var media = await Permission.accessMediaLocation.request();
+    // var storage = await Permission.storage.request();
+    // Directory appDocDir = await getApplicationDocumentsDirectory();
+    // String appDocPath = appDocDir.path;
+    // if (storage.isGranted && media.isGranted) {
+    //   Hive.init(appDocPath);
+    // }
     
     // HelperData.getData();
   }

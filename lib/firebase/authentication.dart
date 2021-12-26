@@ -1,9 +1,10 @@
 import 'package:chat/components/hive_database.dart';
 import 'package:chat/components/shared_database.dart';
-import 'package:chat/models/user_info.dart';
+import 'package:chat/models/hive/user_info.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:hive/hive.dart';
 
 class FirebaseService {
   static FirebaseAuth _auth = FirebaseAuth.instance;
@@ -42,6 +43,8 @@ class FirebaseService {
       'phoneNumber': currentUser.phoneNumber.toString(),
     };
     SharedData.saveUser(userInfo);
+    Boxes.getUserInfoBox().add(UserInf.fromJson(userInfo));
+    
   }
 
   static void writeData() {

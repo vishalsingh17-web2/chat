@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:chat/models/user_info.dart';
+import 'package:chat/models/hive/user_info.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 class Constant{

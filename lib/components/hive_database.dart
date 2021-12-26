@@ -1,4 +1,4 @@
-import 'package:chat/models/user_info.dart';
+import 'package:chat/models/hive/user_info.dart';
 import 'package:hive/hive.dart';
 
 class HelperData {

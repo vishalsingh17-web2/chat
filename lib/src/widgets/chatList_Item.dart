@@ -1,21 +1,19 @@
 import 'package:chat/components/shared_database.dart';
+import 'package:chat/models/hive/user_info.dart';
 import 'package:chat/src/Screens/chatScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ChatListItem extends StatelessWidget {
-  final String name;
+  final UserInf userInf;
   final String message;
   final String time;
-  final String imageUrl;
-  const ChatListItem(
-      {Key? key,
-      required this.name,
-      required this.imageUrl,
-      required this.message,
-      required this.time,
-      required bool isSelected})
-      : super(key: key);
+  const ChatListItem({
+    Key? key,
+    required this.message,
+    required this.time,
+    required this.userInf,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,15 +21,17 @@ class ChatListItem extends StatelessWidget {
       onTap: () {
         Navigator.of(context).push(
           CupertinoPageRoute(
-            builder: (context) => ChatScreen(user: SharedData.userObject!,),
+            builder: (context) => ChatScreen(
+              user: userInf,
+            ),
           ),
         );
       },
       leading: CircleAvatar(
         backgroundColor: Colors.grey,
-        child: Image.asset(imageUrl),
+        child: ClipOval(child: Image.network(userInf.image,height: 40,width: 40)),
       ),
-      title: Text(name, style: Theme.of(context).textTheme.headline3),
+      title: Text(userInf.name, style: Theme.of(context).textTheme.headline3),
       subtitle: Text(message,
           style: const TextStyle(
               color: Color.fromRGBO(170, 170, 170, 0.8), fontSize: 16)),

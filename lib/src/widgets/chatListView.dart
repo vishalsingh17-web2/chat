@@ -1,7 +1,8 @@
+import 'package:chat/models/hive/user_info.dart';
 import 'package:chat/src/widgets/chatList_Item.dart';
+import 'package:hive/hive.dart';
 import 'package:flutter/material.dart';
-
-List<Widget> chatList = const [];
+import 'package:hive_flutter/adapters.dart';
 
 class ChatView extends StatefulWidget {
   const ChatView({Key? key}) : super(key: key);
@@ -12,17 +13,25 @@ class ChatView extends StatefulWidget {
 
 class _ChatViewState extends State<ChatView> {
   @override
-  @override
   Widget build(BuildContext context) {
-    return ListView(
-      physics:
-          const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-      children: [
-        const SizedBox(
-          height: 20,
-        ),
-        ...chatList
-      ],
+    return ValueListenableBuilder<Box<UserInf>>(
+      valueListenable: Boxes.getUserInfoBox().listenable(),
+      builder: (context, userInf, _) {
+        final user = userInf.values.toList().cast<UserInf>();
+        if (user == null) {
+          return Container();
+        }
+        return ListView.builder(
+          physics: const BouncingScrollPhysics(
+              parent: AlwaysScrollableScrollPhysics()),
+          itemCount: user.length,
+          itemBuilder: (context, index) => ChatListItem(
+            userInf: user[index],
+            message: '',
+            time: '',
+          ),
+        );
+      },
     );
   }
 }

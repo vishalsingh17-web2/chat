@@ -1,6 +1,6 @@
 import 'package:chat/components/shared_database.dart';
 import 'package:chat/firebase/authentication.dart';
-import 'package:chat/models/user_info.dart';
+import 'package:chat/models/hive/user_info.dart';
 import 'package:chat/src/Screens/chatScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -140,7 +140,7 @@ class _SearchBarState extends State<SearchBar> {
                 );
               },
               onSelected: (UserInf selection) {
-                
+                Boxes.getUserInfoBox().add(selection);
                 Navigator.of(context).push(
                   CupertinoPageRoute(
                     builder: (context) => ChatScreen(user: selection),
