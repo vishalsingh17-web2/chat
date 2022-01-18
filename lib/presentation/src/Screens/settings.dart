@@ -1,8 +1,9 @@
 import 'package:chat/components/shared_database.dart';
 import 'package:chat/hive/boxes.dart';
 import 'package:chat/main.dart';
-import 'package:chat/theme/theme.dart';
+import 'package:chat/presentation/provider/theme_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class Settings extends StatefulWidget {
   Settings({Key? key}) : super(key: key);
@@ -21,19 +22,17 @@ class _SettingsState extends State<Settings> {
       ),
       body: Column(
         children: [
-          ListTile(
-            title: const Text("Dark Mode"),
-            trailing: Switch(
-              value: Boxes.getTheme()??true,
-              onChanged: (value) {
-                themeBloc.changeTheme(value);
-                if(value){
-                  Boxes.setdarkTheme();
-                }else{
-                  Boxes.setlightTheme();
-                }
-              },
-            ),
+          Consumer<ThemeProvider>(
+            builder: (context,themeProvider, child) {
+              return SwitchListTile(
+                title: const Text('Dark Mode'),
+                value: Boxes.getTheme(),
+                onChanged: (value) {
+                 themeProvider.changeTheme();
+                },
+              );
+            },
+            
           )
         ],
       ),

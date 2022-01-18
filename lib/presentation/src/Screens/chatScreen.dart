@@ -1,15 +1,17 @@
 import 'dart:io';
 
 import 'package:chat/hive/boxes.dart';
+import 'package:chat/hive/conversation/conversation.dart';
 import 'package:chat/main.dart';
-import 'package:chat/hive/user_info.dart';
-import 'package:chat/src/widgets/chatBox.dart';
+import 'package:chat/hive/user/user_info.dart';
+import 'package:chat/presentation/src/widgets/chatBox.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 ScrollController controller = ScrollController();
-List<Widget> conversation = [];
 
 class ChatScreen extends StatefulWidget {
   final UserInf user;
@@ -19,6 +21,8 @@ class ChatScreen extends StatefulWidget {
   _ChatScreenState createState() => _ChatScreenState();
 }
 
+List<Widget> conversation = [];
+
 class _ChatScreenState extends State<ChatScreen> {
   bool show = false;
 
@@ -26,25 +30,6 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   void initState() {
-    SocketIO.init();
-    SocketIO.socket!.onConnect((data) {
-      SocketIO.socket!.on('message', (msg) {
-        print(msg);
-        if (msg['sourceId'] == widget.user.uid &&
-            msg['targetId'] == Boxes.getCurrentUserInfo()!.uid) {
-          setState(() {
-            conversation.add(ChatBox(
-              sentByMe: false,
-              message: msg['message'],
-              time: DateFormat.Hm()
-                  .format(DateTime.parse(msg['time']))
-                  .toString(),
-            ));
-          });
-        }
-      });
-    });
-
     controller.animateTo(
       0.0,
       duration: const Duration(milliseconds: 500),
@@ -90,11 +75,23 @@ class _ChatScreenState extends State<ChatScreen> {
                 flex: 20,
                 child: Container(
                   padding: const EdgeInsets.all(8),
-                  child: ListView(
-                    reverse: true,
-                    physics: const BouncingScrollPhysics(),
-                    controller: controller,
-                    children: [...conversation.reversed],
+                  child: ValueListenableBuilder<Box<ChatModel>>(
+                    valueListenable:
+                        Hive.box<ChatModel>(widget.user.uid).listenable(),
+                    builder: (context, box, child) {
+                      var chat = box.values.toList().cast<ChatModel>();
+                      return ListView.builder(
+                        physics: const BouncingScrollPhysics(),
+                        itemBuilder: (context, index) {
+                          return ChatBox(
+                            sentByMe: chat[index].sentByMe,
+                            message: chat[index].message,
+                            time: chat[index].time,
+                          );
+                        },
+                        itemCount: chat.length,
+                      );
+                    },
                   ),
                 ),
               ),
@@ -129,23 +126,17 @@ class _ChatScreenState extends State<ChatScreen> {
                         color: Theme.of(context).iconTheme.color,
                       ),
                       onPressed: () {
-                        if (_msgController.text.length != 0) {
+                        if (_msgController.text.isNotEmpty) {
+                          Boxes.addCoversation(
+                            chatModel: ChatModel(
+                              sentByMe: true,
+                              message: _msgController.text,
+                              time: DateFormat.jm().format(DateTime.now()),
+                            ),
+                            id: widget.user.uid,
+                          );
                           setState(
                             () {
-                              conversation.add(
-                                ChatBox(
-                                  sentByMe: true,
-                                  message: _msgController.text,
-                                  time:
-                                      "${DateFormat.Hm().format(DateTime.now())}",
-                                ),
-                              );
-                              SocketIO.sendMessage(
-                                message: _msgController.text,
-                                sourceId: Boxes.getCurrentUserInfo()!.uid,
-                                targetId: widget.user.uid,
-                                time: DateTime.now().toString(),
-                              );
                               _msgController.clear();
                               controller.animateTo(
                                 0.0,

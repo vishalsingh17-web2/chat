@@ -1,10 +1,11 @@
 import 'package:chat/components/shared_database.dart';
 import 'package:chat/firebase/authentication.dart';
 import 'package:chat/hive/boxes.dart';
-import 'package:chat/hive/user_info.dart';
-import 'package:chat/src/Screens/login.dart';
-import 'package:chat/src/Screens/settings.dart';
+import 'package:chat/hive/user/user_info.dart';
+import 'package:chat/presentation/src/Screens/login.dart';
+import 'package:chat/presentation/src/Screens/settings.dart';
 import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
 
 var myMenuItems = <String>[
@@ -44,7 +45,7 @@ Widget profileHeader({
         ),
       ),
     ),
-    title: Text(name, style: Theme.of(context).textTheme.headline3),
+    title: Text(name[0].toUpperCase()+name.substring(1), style: Theme.of(context).textTheme.headline3),
     trailing: PopupMenuButton<String>(
       onSelected: (item) {
         switch (item) {

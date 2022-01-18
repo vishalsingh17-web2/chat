@@ -1,8 +1,9 @@
 import 'dart:async';
 
+import 'package:chat/main.dart';
 import 'package:flutter/material.dart';
 
-import '../main.dart';
+
 
 class ThemeX {
   static ThemeData darkTheme() {
@@ -183,18 +184,6 @@ class ThemeX {
     );
   }
 
-  static Widget switchTheme(bool value) {
-    return Switch(
-      value: value,
-      onChanged: (value) {
-        themeBloc.changeTheme(value);
-      },
-    );
-  }
+  
 }
 
-class ThemeBloc {
-  final _themeController = StreamController<bool>.broadcast();
-  get themeStream => _themeController.stream;
-  get changeTheme => _themeController.sink.add;
-}

@@ -1,10 +1,12 @@
 import 'package:chat/components/shared_database.dart';
 import 'package:chat/firebase/authentication.dart';
 import 'package:chat/hive/boxes.dart';
-import 'package:chat/hive/user_info.dart';
-import 'package:chat/src/Screens/chatScreen.dart';
+import 'package:chat/hive/user/user_info.dart';
+import 'package:chat/presentation/src/Screens/chatScreen.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 class SearchBar extends StatefulWidget {
   const SearchBar({Key? key}) : super(key: key);
@@ -144,11 +146,11 @@ class _SearchBarState extends State<SearchBar> {
                 if(Boxes.getUserInfoBox().get(selection.uid)==null){
                   Boxes.getUserInfoBox().put(selection.uid, selection);
                 }
-                Navigator.of(context).push(
-                  CupertinoPageRoute(
-                    builder: (context) => ChatScreen(user: selection),
-                  ),
-                );
+                // Navigator.of(context).push(
+                //   CupertinoPageRoute(
+                //     builder: (context) => ChatScreen(user: selection),
+                //   ),
+                // );
               },
             ),
           ),

@@ -1,12 +1,13 @@
 import 'package:chat/components/shared_database.dart';
 import 'package:chat/firebase/authentication.dart';
 import 'package:chat/hive/boxes.dart';
-import 'package:chat/src/Screens/homepage.dart';
+import 'package:chat/presentation/src/Screens/homepage.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
-import '../../main.dart';
+
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);

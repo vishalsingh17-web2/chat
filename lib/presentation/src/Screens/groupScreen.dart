@@ -1,5 +1,6 @@
-import 'package:chat/src/widgets/chatBox.dart';
-import 'package:chat/src/widgets/groupHeader.dart';
+
+import 'package:chat/presentation/src/widgets/chatBox.dart';
+import 'package:chat/presentation/src/widgets/groupHeader.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 

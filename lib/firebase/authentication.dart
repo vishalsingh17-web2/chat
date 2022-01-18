@@ -1,6 +1,6 @@
 import 'package:chat/components/shared_database.dart';
 import 'package:chat/hive/boxes.dart';
-import 'package:chat/hive/user_info.dart';
+import 'package:chat/hive/user/user_info.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
