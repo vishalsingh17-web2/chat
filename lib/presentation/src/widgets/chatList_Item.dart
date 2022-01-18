@@ -34,12 +34,17 @@ class ChatListItem extends StatelessWidget {
       },
       leading: CircleAvatar(
         backgroundColor: Colors.grey,
-        child: ClipOval(child: Image.network(userInf.image,height: 40,width: 40)),
+        child: ClipOval(
+            child: Image.network(userInf.image, height: 40, width: 40)),
       ),
       title: Text(userInf.name, style: Theme.of(context).textTheme.headline3),
-      subtitle: Text(message,
-          style: const TextStyle(
-              color: Color.fromRGBO(170, 170, 170, 0.8), fontSize: 16)),
+      subtitle: Text(
+        message,
+        style: Theme.of(context).textTheme.bodyText1!.copyWith(
+          fontWeight: FontWeight.w400,
+              fontSize: 15,
+            ),
+      ),
       trailing: Text(time, style: Theme.of(context).textTheme.caption),
     );
   }
