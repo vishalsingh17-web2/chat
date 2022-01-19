@@ -13,7 +13,6 @@ class ChatView extends StatefulWidget {
   State<ChatView> createState() => _ChatViewState();
 }
 
-
 class _ChatViewState extends State<ChatView> {
   @override
   Widget build(BuildContext context) {
@@ -24,21 +23,28 @@ class _ChatViewState extends State<ChatView> {
         if (user == null) {
           return Container();
         }
-        return ListView.builder(
-          physics: const BouncingScrollPhysics(
-            parent: AlwaysScrollableScrollPhysics(),
-          ),
-          itemCount: user.length,
-          itemBuilder: (context, index) {
-            if (Boxes.getCurrentUserInfo()!.uid == user[index].uid) {
-              return Container();
-            }
-            return ChatListItem(
-              userInf: user[index],
-              message: Boxes.getLastMessage(user[index].uid)?.message??'',
-              time: Boxes.getLastMessage(user[index].uid)?.time??'',
-            );
+        return RefreshIndicator(
+          color: Theme.of(context).primaryColor,
+          onRefresh: () async{
+            await Boxes.openAllConversationBox();
+            return Future.delayed(Duration(seconds: 1));
           },
+          child: ListView.builder(
+            physics: const BouncingScrollPhysics(
+              parent: AlwaysScrollableScrollPhysics(),
+            ),
+            itemCount: user.length,
+            itemBuilder: (context, index) {
+              if (Boxes.getCurrentUserInfo()!.uid == user[index].uid) {
+                return Container();
+              }
+              return ChatListItem(
+                userInf: user[index],
+                message: Boxes.getLastMessage(user[index].uid)?.message ?? '',
+                time: Boxes.getLastMessage(user[index].uid)?.time ?? '',
+              );
+            },
+          ),
         );
       },
     );

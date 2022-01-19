@@ -26,6 +26,8 @@ class Boxes{
   static const String currentUser = 'currentUser';
   static UserInf? getCurrentUserInfo() => Hive.box<UserInf>(userInfo).get(currentUser);
 
+  static deleteUserData({required String uid}) => Hive.box<UserInf>(userInfo).delete(uid);
+
 
 
   // Conversation Boxes
@@ -58,5 +60,10 @@ class Boxes{
     if(Hive.isBoxOpen(id) && Hive.box<ChatModel>(id).length > 0){
       return Hive.box<ChatModel>(id).getAt(Hive.box<ChatModel>(id).length-1);
     }
+  }
+
+  static deleteUserConversation({required String uid}){
+    Hive.box<ChatModel>(uid).clear();
+    Hive.box<ChatModel>(uid).close();
   }
 }

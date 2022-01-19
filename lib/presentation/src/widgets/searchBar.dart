@@ -16,7 +16,7 @@ class SearchBar extends StatefulWidget {
 }
 
 class _SearchBarState extends State<SearchBar> {
-  TextEditingController _controller = TextEditingController();
+  final TextEditingController _controller = TextEditingController();
   List<UserInf> usersList = [];
   getUserObjectList() async {
     List<UserInf> list = [];
@@ -96,7 +96,7 @@ class _SearchBarState extends State<SearchBar> {
                   alignment: Alignment.topLeft,
                   child: Material(
                     child: Container(
-                      height: MediaQuery.of(context).size.height * 0.3,
+                      height: MediaQuery.of(context).size.height * 0.4,
                       width: 300,
                       decoration: const BoxDecoration(
                         borderRadius: BorderRadius.only(
@@ -107,11 +107,12 @@ class _SearchBarState extends State<SearchBar> {
                       child: ListView.builder(
                         itemCount: options.length,
                         itemBuilder: (context, index) {
-                          // if (options.elementAt(index).email ==
-                          //     Boxes.getCurrentUserInfo()!.email) {
-                          //   return Container();
-                          // } else {
+                          if (options.elementAt(index).email ==
+                              Boxes.getCurrentUserInfo()!.email) {
+                            return Container();
+                          } else {
                             return ListTile(
+                              
                               leading: ClipOval(
                                 child: Image.network(
                                   options.elementAt(index).image,
@@ -129,13 +130,14 @@ class _SearchBarState extends State<SearchBar> {
                               ),
                               trailing: TextButton(
                                 onPressed: () {
+                                  FocusScope.of(context).unfocus();
                                   _controller.clear();
                                   onSelected(options.elementAt(index));
                                 },
                                 child: const Text('Add'),
                               ),
                             );
-                          // }
+                          }
                         },
                       ),
                     ),
