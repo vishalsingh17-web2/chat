@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:chat/data/socket_controller.dart';
 import 'package:chat/hive/boxes.dart';
 import 'package:chat/hive/conversation/conversation.dart';
 import 'package:chat/main.dart';
@@ -30,6 +31,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   void initState() {
+    connectToServer();
     controller.animateTo(
       0.0,
       duration: const Duration(milliseconds: 500),
@@ -127,6 +129,12 @@ class _ChatScreenState extends State<ChatScreen> {
                       ),
                       onPressed: () {
                         if (_msgController.text.isNotEmpty) {
+                          sendMessage(
+                            message: _msgController.text,
+                            sourceId: Boxes.getCurrentUserInfo()!.uid,
+                            targetId: widget.user.uid,
+                            time: DateFormat.jm().format(DateTime.now())
+                          );
                           Boxes.addCoversation(
                             chatModel: ChatModel(
                               sentByMe: true,

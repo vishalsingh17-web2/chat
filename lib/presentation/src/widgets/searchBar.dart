@@ -107,10 +107,10 @@ class _SearchBarState extends State<SearchBar> {
                       child: ListView.builder(
                         itemCount: options.length,
                         itemBuilder: (context, index) {
-                          if (options.elementAt(index).email ==
-                              Boxes.getCurrentUserInfo()!.email) {
-                            return Container();
-                          } else {
+                          // if (options.elementAt(index).email ==
+                          //     Boxes.getCurrentUserInfo()!.email) {
+                          //   return Container();
+                          // } else {
                             return ListTile(
                               
                               leading: ClipOval(
@@ -137,7 +137,7 @@ class _SearchBarState extends State<SearchBar> {
                                 child: const Text('Add'),
                               ),
                             );
-                          }
+                          // }
                         },
                       ),
                     ),

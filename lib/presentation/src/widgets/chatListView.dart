@@ -35,9 +35,9 @@ class _ChatViewState extends State<ChatView> {
             ),
             itemCount: user.length,
             itemBuilder: (context, index) {
-              if (Boxes.getCurrentUserInfo()!.uid == user[index].uid) {
-                return Container();
-              }
+              // if (Boxes.getCurrentUserInfo()!.uid == user[index].uid) {
+              //   return Container();
+              // }
               return ChatListItem(
                 userInf: user[index],
                 message: Boxes.getLastMessage(user[index].uid)?.message ?? '',
