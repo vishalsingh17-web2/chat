@@ -1,3 +1,4 @@
+import 'package:chat/data/socket_controller.dart';
 import 'package:chat/presentation/provider/theme_provider.dart';
 import 'package:chat/presentation/provider/user_provider.dart';
 import 'package:chat/presentation/src/Screens/homepage.dart';
@@ -25,6 +26,7 @@ class MyApp extends StatefulWidget {
 check() {
   FirebaseAuth _firebase = FirebaseAuth.instance;
   if (_firebase.currentUser != null) {
+    connectToServer();
     return HomePage();
   } else {
     return Login();
@@ -62,5 +64,6 @@ class Init {
     await Hive.initFlutter();
     await Boxes.init();
     Boxes.setlightTheme();
+    
   }
 }

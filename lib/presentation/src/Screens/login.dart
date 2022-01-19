@@ -1,4 +1,5 @@
 import 'package:chat/components/shared_database.dart';
+import 'package:chat/data/socket_controller.dart';
 import 'package:chat/firebase/authentication.dart';
 import 'package:chat/hive/boxes.dart';
 import 'package:chat/presentation/src/Screens/homepage.dart';
@@ -93,6 +94,7 @@ class _LoginState extends State<Login> {
                   FirebaseService.writeData();
                   
                   print("Login Successful");
+                  connectToServer();
                   Navigator.of(context).pushReplacement(
                     CupertinoPageRoute(
                       builder: (context) => HomePage(),

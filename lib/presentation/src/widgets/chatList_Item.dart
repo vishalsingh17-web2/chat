@@ -85,6 +85,7 @@ class ChatListItem extends StatelessWidget {
                 fontWeight: FontWeight.w400,
                 fontSize: 15,
               ),
+          overflow: TextOverflow.ellipsis,
         ),
         trailing: Text(time, style: Theme.of(context).textTheme.caption),
       ),

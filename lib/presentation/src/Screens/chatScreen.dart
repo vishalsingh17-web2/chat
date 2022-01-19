@@ -31,7 +31,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   void initState() {
-    connectToServer();
+    
     controller.animateTo(
       0.0,
       duration: const Duration(milliseconds: 500),
