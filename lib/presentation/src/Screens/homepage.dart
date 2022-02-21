@@ -7,7 +7,6 @@ import 'package:chat/presentation/src/widgets/groupListView.dart';
 import 'package:chat/presentation/src/widgets/profileHeader.dart';
 import 'package:chat/presentation/src/widgets/searchBar.dart';
 
-
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
@@ -42,31 +41,27 @@ class _HomePageState extends State<HomePage>
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: Consumer<UserProvider>(
-          builder: (context, userProvider, child){
-          return NestedScrollView(
+          body: Consumer<UserProvider>(builder: (context, userProvider, child) {
+        return NestedScrollView(
+          physics: const BouncingScrollPhysics(),
             controller: _scrollViewController,
             headerSliverBuilder: (context, bool) => [
-              SliverAppBar(
-                backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                pinned: true,
-                floating: true,
-                toolbarHeight: 100,
-                expandedHeight: 250,
-                elevation: 0,
-                flexibleSpace: FlexibleSpaceBar(
-                  background: Column(
-                    children: [
-                      profileHeader(
-                        context: context,
-                        name: userProvider.userInfo.name,
-                        imageUrl: userProvider.userInfo.image,
-                      ),
-                      const SearchBar()
-                    ],
+                  SliverToBoxAdapter(
+                    child: Column(
+                      children: [
+                        profileHeader(
+                          context: context,
+                          name: userProvider.userInfo.name,
+                          imageUrl: userProvider.userInfo.image,
+                        ),
+                        const SearchBar()
+                      ],
+                    ),
                   ),
-                ),
-                bottom: TabBar(
+                ],
+            body: Column(
+              children: [
+                TabBar(
                   controller: _tabController,
                   tabs: const [
                     Tab(text: 'Chats', icon: Icon(Icons.chat)),
@@ -74,19 +69,19 @@ class _HomePageState extends State<HomePage>
                     Tab(text: 'Calls', icon: Icon(Icons.call)),
                   ],
                 ),
-              ),
-            ],
-            body: TabBarView(
-              controller: _tabController,
-              children: [
-                ChatView(),
-                GroupView(),
-                Container(),
+                Expanded(
+                  child: TabBarView(
+                    controller: _tabController,
+                    children: [
+                      ChatView(),
+                      GroupView(),
+                      Container(),
+                    ],
+                  ),
+                ),
               ],
-            )
-          );}
-        )
-      ),
+            ));
+      })),
     );
   }
 }

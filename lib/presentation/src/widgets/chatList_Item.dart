@@ -12,11 +12,13 @@ class ChatListItem extends StatelessWidget {
   final UserInf userInf;
   final String message;
   final String time;
+  final bool isOnline;
   const ChatListItem({
     Key? key,
     required this.message,
     required this.time,
     required this.userInf,
+    required this.isOnline,
   }) : super(key: key);
 
   @override
@@ -57,7 +59,6 @@ class ChatListItem extends StatelessWidget {
       },
       onDismissed: (direction) {
         if (direction == DismissDirection.endToStart) {
-          print('delete');
           Boxes.deleteUserConversation(uid: userInf.uid);
           Boxes.deleteUserData(uid: userInf.uid);
         }
@@ -87,7 +88,23 @@ class ChatListItem extends StatelessWidget {
               ),
           overflow: TextOverflow.ellipsis,
         ),
-        trailing: Text(time, style: Theme.of(context).textTheme.caption),
+        trailing: SizedBox(
+          width: 70,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 7,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color:isOnline? Colors.green: Colors.grey,
+                ),
+              ),
+              Text(time, style: Theme.of(context).textTheme.caption),
+            ],
+          ),
+        ),
       ),
     );
   }

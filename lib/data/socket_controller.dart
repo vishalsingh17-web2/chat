@@ -1,5 +1,6 @@
 import 'package:chat/hive/boxes.dart';
 import 'package:chat/hive/conversation/conversation.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
@@ -38,7 +39,7 @@ Socket? socket;
 void connectToServer() {
   try {
     // Configure socket transports must be sepecified
-    socket = io('http://192.168.1.9:3000', <String, dynamic>{
+    socket = io('https://glacial-fortress-22545.herokuapp.com/', <String, dynamic>{
       'transports': ['websocket'],
       'autoConnect': false,
     });
@@ -48,14 +49,15 @@ void connectToServer() {
     socket!.emit('signin', Boxes.getCurrentUserInfo()!.uid);
 
     // Handle socket! events
-    socket!.on('connect', (_) => print('connect: ${socket!.id}'));
+    socket!.on('connect', (_) => debugPrint('connect: ${socket!.id}'));
     socket!.on('location', handleLocationListen);
     socket!.on('typing', handleTyping);
     socket!.on('message', handleMessage);
-    socket!.on('disconnect', (_) => print('disconnect'));
-    socket!.on('fromServer', (_) => print(_));
+    socket!.on('disconnect', (_) => debugPrint('disconnect'));
+    socket!.on('fromServer', (_) => debugPrint(_));
+    socket!.on('isOnline', (data) => handleOnline);
   } catch (e) {
-    print(e.toString());
+    debugPrint(e.toString());
   }
 }
 
@@ -64,26 +66,35 @@ sendLocation(Map<String, dynamic> data) {
   socket!.emit("location", data);
 }
 
+// Send isOnline to Server
+sendIsOnline({required bool isOnline}) {
+  socket?.emit("isOnline", {
+    "isOnline": isOnline,
+    "uid": Boxes.getCurrentUserInfo()!.uid,
+  });
+}
+
 // Listen to Location updates of connected usersfrom server
 handleLocationListen(dynamic data) async {
-  print(data);
+  debugPrint(data);
 }
 
 // Send update of user's typing status
-sendTyping(bool typing) {
-  socket!.emit("typing", {
-    "id": Boxes.getCurrentUserInfo()!.uid,
-    "typing": typing,
+sendTyping({required String targetId, required bool isTyping}) {
+  socket?.emit("typing", {
+    "sourceId": Boxes.getCurrentUserInfo()!.uid,
+    'targetId': targetId,
+    "typing": isTyping,
   });
 }
 
 // Listen to update of typing status from connected users
-void handleTyping(dynamic data) {
-  if (data['typing']) {
-    print(data['id'] + " is typing");
-  } else {
-    print(data['id'] + " stopped typing");
-  }
+handleTyping(dynamic data) {
+  return data['typing'];
+}
+// listen to online status
+handleOnline(data){
+  return data['isOnline'];
 }
 
 // Send a Message to the server

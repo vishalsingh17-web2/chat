@@ -71,7 +71,7 @@ class _GroupViewState extends State<GroupView> {
         const SizedBox(
           height: 20,
         ),
-        ...chatList
+        // ...chatList
       ],
     );
   }
