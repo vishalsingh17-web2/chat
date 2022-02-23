@@ -3,6 +3,7 @@ import 'package:chat/hive/boxes.dart';
 import 'package:chat/hive/user/user_info.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hive/hive.dart';
 
@@ -56,6 +57,16 @@ class FirebaseService {
       'photoUrl': user.photoURL,
       'displayName': user.displayName,
       'phoneNumber': user.phoneNumber,
+      'fcmToken': Boxes.getFCMToken(),
+    });
+  }
+  // get FCM token using email
+  static Future getFCMToken(String email) async {
+    users.doc(email).get().then((DocumentSnapshot documentSnapshot) async {
+      if (documentSnapshot.exists && documentSnapshot.data() != null) {
+        
+        return documentSnapshot.get('fcmToken');
+      }
     });
   }
 

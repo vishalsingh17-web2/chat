@@ -3,6 +3,10 @@ import 'package:chat/hive/conversation/conversation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
+class EndPoints{
+  static const HEROKU_CHAT_SERVER = 'https://glacial-fortress-22545.herokuapp.com/';
+  static const localhost = 'http://192.168.1.9:3000';
+}
 
 class SocketIO {
   static Socket? socket;
@@ -39,7 +43,7 @@ Socket? socket;
 void connectToServer() {
   try {
     // Configure socket transports must be sepecified
-    socket = io('https://glacial-fortress-22545.herokuapp.com/', <String, dynamic>{
+    socket = io(EndPoints.localhost, <String, dynamic>{
       'transports': ['websocket'],
       'autoConnect': false,
     });
@@ -102,12 +106,17 @@ sendMessage(
     {required String message,
     required String sourceId,
     required String targetId,
-    required String time}) {
+    required String time,
+    required String fcmToken,
+    required String name
+    }) {
   socket!.emit('message', {
     'message': message,
     'sourceId': sourceId,
     'targetId': targetId,
     'time': time,
+    'fcmToken': fcmToken,
+    'sendersName':name
   });
 }
 

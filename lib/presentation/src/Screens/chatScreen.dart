@@ -2,11 +2,13 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:chat/data/socket_controller.dart';
+import 'package:chat/firebase/authentication.dart';
 import 'package:chat/hive/boxes.dart';
 import 'package:chat/hive/conversation/conversation.dart';
 import 'package:chat/main.dart';
 import 'package:chat/hive/user/user_info.dart';
 import 'package:chat/presentation/provider/typing_provider.dart';
+import 'package:chat/presentation/provider/users_data.dart';
 import 'package:chat/presentation/src/widgets/chatBox.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -31,14 +33,15 @@ List<Widget> conversation = [];
 class _ChatScreenState extends State<ChatScreen> {
   bool show = false;
 
-  TextEditingController _msgController = TextEditingController();
-  StreamController<String> streamController = StreamController<String>.broadcast();
 
+  TextEditingController _msgController = TextEditingController();
+  StreamController<String> streamController =
+      StreamController<String>.broadcast();
 
   @override
   void initState() {
     streamController.stream.listen((event) {
-      print(event);
+      debugPrint(event);
       if (event == "typing") {
         sendTyping(targetId: widget.user.uid, isTyping: true);
       } else if (event == "stop typing") {
@@ -47,6 +50,7 @@ class _ChatScreenState extends State<ChatScreen> {
     });
     super.initState();
   }
+
   @override
   void dispose() {
     streamController.add("stop typing");
@@ -56,6 +60,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   Widget build(BuildContext context) {
+    
     return SafeArea(
       child: Material(
         child: Container(
@@ -93,10 +98,10 @@ class _ChatScreenState extends State<ChatScreen> {
                             typing.isTyping && typing.uid == widget.user.uid
                                 ? 'typing...'
                                 : '',
-                            style: Theme.of(context).textTheme.headline4!.copyWith(
-                                  color: Colors.grey,
-                                  fontSize: 13
-                                ),
+                            style: Theme.of(context)
+                                .textTheme
+                                .headline4!
+                                .copyWith(color: Colors.grey, fontSize: 13),
                           );
                         }),
                       ],
@@ -109,13 +114,11 @@ class _ChatScreenState extends State<ChatScreen> {
                 child: Container(
                   padding: const EdgeInsets.all(8),
                   child: ValueListenableBuilder<Box<ChatModel>>(
-
                     valueListenable:
                         Hive.box<ChatModel>(widget.user.uid).listenable(),
                     builder: (context, box, child) {
                       var chat = box.values.toList().cast<ChatModel>();
                       return ListView.builder(
-                        
                         physics: const BouncingScrollPhysics(),
                         itemBuilder: (context, index) {
                           return ChatBox(
@@ -138,8 +141,8 @@ class _ChatScreenState extends State<ChatScreen> {
                     builder: (context, typing, _) {
                       return ListTile(
                         title: TextFormField(
-                          onChanged: (value){
-                            streamController.add("typing"); 
+                          onChanged: (value) {
+                            streamController.add("typing");
                           },
                           cursorColor: Theme.of(context).primaryColor,
                           controller: _msgController,
@@ -148,8 +151,7 @@ class _ChatScreenState extends State<ChatScreen> {
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(25.0),
                               borderSide: BorderSide(
-                                color:
-                                    Theme.of(context).unselectedWidgetColor,
+                                color: Theme.of(context).unselectedWidgetColor,
                               ),
                             ),
                             enabledBorder: OutlineInputBorder(
@@ -166,14 +168,19 @@ class _ChatScreenState extends State<ChatScreen> {
                             Icons.send,
                             color: Theme.of(context).iconTheme.color,
                           ),
-                          onPressed: () {
+                          onPressed: () async{
                             streamController.add("stop typing");
+                            
                             if (_msgController.text.isNotEmpty) {
+                              debugPrint(Provider.of<UserData>(context,listen: false).fcmToken,);
                               sendMessage(
-                                  message: _msgController.text,
-                                  sourceId: Boxes.getCurrentUserInfo()!.uid,
-                                  targetId: widget.user.uid,
-                                  time: DateFormat.jm().format(DateTime.now()));
+                                message: _msgController.text,
+                                sourceId: Boxes.getCurrentUserInfo()!.uid,
+                                targetId: widget.user.uid,
+                                time: DateFormat.jm().format(DateTime.now()),
+                                name: Boxes.getCurrentUserInfo()!.name,
+                                fcmToken: Provider.of<UserData>(context,listen: false).fcmToken,
+                              );
                               Boxes.addCoversation(
                                 chatModel: ChatModel(
                                   sentByMe: true,

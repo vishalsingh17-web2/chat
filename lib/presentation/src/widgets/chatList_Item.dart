@@ -1,12 +1,16 @@
 import 'package:chat/components/shared_database.dart';
+import 'package:chat/firebase/authentication.dart';
 import 'package:chat/hive/boxes.dart';
 import 'package:chat/hive/conversation/conversation.dart';
 import 'package:chat/hive/user/user_info.dart';
+import 'package:chat/presentation/provider/users_data.dart';
 import 'package:chat/presentation/src/Screens/chatScreen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:provider/provider.dart';
 
 class ChatListItem extends StatelessWidget {
   final UserInf userInf;
@@ -38,7 +42,8 @@ class ChatListItem extends StatelessWidget {
             context: context,
             builder: (context) {
               return AlertDialog(
-                title: const Text('Are you sure?', style: TextStyle(fontSize: 25)),
+                title:
+                    const Text('Are you sure?', style: TextStyle(fontSize: 25)),
                 content: const Text('Do you want to delete this conversation?'),
                 actions: <Widget>[
                   TextButton(
@@ -66,6 +71,8 @@ class ChatListItem extends StatelessWidget {
       child: ListTile(
         onTap: () async {
           await Boxes.openConversationBox(userInf.uid);
+          Provider.of<UserData>(context, listen: false)
+              .getUserFCMwithEmail(userInf.email);
           Navigator.of(context).push(
             CupertinoPageRoute(
               builder: (context) => ChatScreen(
@@ -98,7 +105,7 @@ class ChatListItem extends StatelessWidget {
                 width: 7,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color:isOnline? Colors.green: Colors.grey,
+                  color: isOnline ? Colors.green : Colors.grey,
                 ),
               ),
               Text(time, style: Theme.of(context).textTheme.caption),

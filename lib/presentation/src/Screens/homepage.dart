@@ -2,6 +2,7 @@ import 'package:chat/components/shared_database.dart';
 import 'package:chat/hive/boxes.dart';
 import 'package:chat/hive/user/user_info.dart';
 import 'package:chat/presentation/provider/user_provider.dart';
+import 'package:chat/presentation/provider/users_data.dart';
 import 'package:chat/presentation/src/widgets/chatListView.dart';
 import 'package:chat/presentation/src/widgets/groupListView.dart';
 import 'package:chat/presentation/src/widgets/profileHeader.dart';
@@ -41,7 +42,7 @@ class _HomePageState extends State<HomePage>
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-          body: Consumer<UserProvider>(builder: (context, userProvider, child) {
+          body: Consumer2<UserProvider, UserData>(builder: (context, userProvider, userData,child) {
         return NestedScrollView(
           physics: const BouncingScrollPhysics(),
             controller: _scrollViewController,

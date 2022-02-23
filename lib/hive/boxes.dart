@@ -9,8 +9,13 @@ class Boxes{
     Hive.registerAdapter(ChatModelAdapter());
     await Hive.openBox<UserInf>('userInfo');
     await Hive.openBox('theme');
+    await Hive.openBox('tokens');
     await openAllConversationBox();
   }
+  // FCM Tokens
+  static Box _tokensBox() => Hive.box('tokens');
+  static setFCMToken(String token) => _tokensBox().put('token', token);
+  static getFCMToken() => _tokensBox().get('token');
 
   static Box getThemeBox() => Hive.box('theme');
 
