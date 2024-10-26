@@ -6,6 +6,8 @@ import 'package:socket_io_client/socket_io_client.dart' as IO;
 class EndPoints{
   static const HEROKU_CHAT_SERVER = 'https://glacial-fortress-22545.herokuapp.com/';
   static const localhost = 'http://192.168.1.9:3000';
+
+  // Checkout
 }
 
 class SocketIO {
